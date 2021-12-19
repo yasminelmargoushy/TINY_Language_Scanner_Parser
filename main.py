@@ -6,7 +6,8 @@ from PyQt5.QtWidgets import QMessageBox
 
 # IMPORTS FUNCTIONS FROM FILES:
 from Scanner import Scan, PrintTokens
-
+from Parser import Parser
+#Draw
 
 # GLOBAL VARIABLES:
 Initial_Text = '''{ Sample program in TINY language – computes factorial}
@@ -190,29 +191,82 @@ class Ui_MainWindow(object):
         global TokensList
         Output_Type = "Scan"
         TokensList = Scan(self.input_tedt.toPlainText())
-        ReturnList = PrintTokens(TokensList)
-        Output_String = ReturnList [1]
-        self.output_lbl.setText(Output_String)
-        if ReturnList[0] == True:
+        if not TokensList:
             # Message Box
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
             msg.setText("Error")
-            msg.setInformativeText(f"This TINY Code has a lexical Error")
+            msg.setInformativeText(f"No Input Code")
             msg.setWindowTitle("Error")
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
+        else:
+            ReturnList = PrintTokens(TokensList)
+            Output_String = ReturnList [1]
+            self.output_lbl.setText(Output_String)
+            if ReturnList[0] == True:
+                # Message Box
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setText("Lexical Error")
+                msg.setInformativeText(f"This TINY Code has a Lexical Error")
+                msg.setWindowTitle("Error")
+                msg.setStandardButtons(QMessageBox.Ok)
+                msg.exec_()
 
 
     def parse_handler(self):
-        # Message Box
-        msg = QMessageBox()
-        msg.setIcon(QMessageBox.Information)
-        msg.setText("Error")
-        msg.setInformativeText(f"Functionality of this Button is not Implemented Yet")
-        msg.setWindowTitle("Information")
-        msg.setStandardButtons(QMessageBox.Ok)
-        msg.exec_()
+        global Output_String
+        global Output_Type
+        global TokensList
+        Output_Type = "Scan"
+        TokensList = Scan(self.input_tedt.toPlainText())
+        if not TokensList:
+            # Message Box
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Error")
+            msg.setInformativeText(f"No Input Code")
+            msg.setWindowTitle("Error")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
+        else:
+            ReturnList = PrintTokens(TokensList)
+            Output_String = ReturnList [1]
+            self.output_lbl.setText(Output_String)
+            if ReturnList[0] == True:
+                # Message Box
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setText("Lexical Error")
+                msg.setInformativeText(f"This TINY Code has a Lexical Error")
+                msg.setWindowTitle("Error")
+                msg.setStandardButtons(QMessageBox.Ok)
+                msg.exec_()
+            else:
+                Parse_OBJ = Parser()
+                Parse_OBJ.set_tokens_list_and_code_list(TokensList)
+                ParseRet = Parse_OBJ.run()
+                if ParseRet[0] == True:
+                    # Message Box
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Warning)
+                    msg.setText("Syntax Error")
+                    Info = "This TINY Code has a Syntax Error\n"
+                    for Token in ParseRet[1]:
+                        Info = Info + f'LINE# {Token[2]} Syntax Error with Token "{Token[1]}"\n'
+                    msg.setInformativeText(Info)
+                    msg.setWindowTitle("Error")
+                    msg.setStandardButtons(QMessageBox.Ok)
+                    msg.exec_()
+                else:
+                    nodes_list = Parse_OBJ.nodes_table
+                    edges_list = Parse_OBJ.edges_table
+                    # Add Nodes to Graph
+
+                    # Add Edges to Graph
+
+                    Parse_OBJ.clear_tables()
 
 
     def save_handler(self):

@@ -3,19 +3,23 @@ SpecialSymbols = ['+', '-', '*', '/', '=', '<', '>', '(', ')', ';']
 SpecialSymbolsSTR = ["PLUS", "MINUS", "TIMES", "DIVIDE", "EQUAL", "LESS_THAN", "GREATER_THAN", "LEFT_BRACKET", "RIGHT_BRACKET", "SEMI_COLON"]
 
 def Scan(InputTxt):
+    InputTxt += " "
     TokenList = []
     state = "Start"
     Token = ""
     OpenComments = 0
+    LineNumber = 1
     for x in InputTxt:
+        if x == '\n':
+            LineNumber +=1
         if state == "Identifier":
             if (x.isalpha()) or (x.isnumeric()):
                 Token += x
             else:
                 if Token in ReservedWords:
-                    TempList = [Token, "Reserved Word", Token.upper()]
+                    TempList = [Token, "Reserved Word", Token.upper(), LineNumber]
                 else:
-                    TempList = [Token, state, "ID"]
+                    TempList = [Token, state, "ID", LineNumber]
                 TokenList.append(TempList)
                 state = "Start"
                 Token = ""
@@ -23,7 +27,7 @@ def Scan(InputTxt):
             if (x.isnumeric()) or (x == '.'):
                 Token += x
             else:
-                TempList = [Token, state, "NUM"]
+                TempList = [Token, state, "NUM", LineNumber]
                 TokenList.append(TempList)
                 state = "Start"
                 Token = ""
@@ -38,7 +42,7 @@ def Scan(InputTxt):
         elif state == ":Special Symbol":
             if x == '=':
                 Token += x
-                TempList = [Token, "Special Symbol", "ASSIGN"]
+                TempList = [Token, "Special Symbol", "ASSIGN", LineNumber]
                 state = "Start"
                 TokenList.append(TempList)
                 continue
@@ -63,12 +67,12 @@ def Scan(InputTxt):
                 Token = ""
                 state = "Start"
                 if x in SpecialSymbols:
-                    TempList = [x, "Special Symbol", SpecialSymbolsSTR[SpecialSymbols.index(x)]]
+                    TempList = [x, "Special Symbol", SpecialSymbolsSTR[SpecialSymbols.index(x)], LineNumber]
                     TokenList.append(TempList)
                 else:
-                    TempList = [x, "Unexpected Symbol", "ERROR"]
+                    TempList = [x, "Unexpected Symbol", "ERROR", LineNumber]
                     TokenList.append(TempList)
-                    #break
+
     return TokenList
 
 def PrintTokens(TokenList):

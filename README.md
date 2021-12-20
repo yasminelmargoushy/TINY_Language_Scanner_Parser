@@ -49,38 +49,8 @@ Input:
      end
 Output:
 Scanner Output:
-read 			 Reserved Word 			 READ 
-x 			 Identifier 			 ID 
-; 			 Special Symbol 			 SEMI_COLON 
-if 			 Reserved Word 			 IF 
-0 			 Number 				 NUM 
-< 			 Special Symbol 			 LESS_THAN 
-x 			 Identifier 			 ID 
-then 			 Reserved Word 			 THEN 
-fact 			 Identifier 			 ID 
-:= 			 Special Symbol 			 ASSIGN 
-1 			 Number 				 NUM 
-; 			 Special Symbol 			 SEMI_COLON 
-repeat 			 Reserved Word 			 REPEAT 
-fact 			 Identifier 			 ID 
-:= 			 Special Symbol 			 ASSIGN 
-fact 			 Identifier 			 ID 
-* 			 Special Symbol 			 TIMES 
-x 			 Identifier 			 ID 
-; 			 Special Symbol 			 SEMI_COLON 
-x 			 Identifier 			 ID 
-:= 			 Special Symbol 			 ASSIGN 
-x 			 Identifier 			 ID 
-- 			 Special Symbol 			 MINUS 
-1 			 Number 				 NUM 
-until 			 Reserved Word 			 UNTIL 
-x 			 Identifier 			 ID 
-= 			 Special Symbol 			 EQUAL 
-0 			 Number 				 NUM 
-; 			 Special Symbol 			 SEMI_COLON 
-write 			 Reserved Word 			 WRITE 
-fact 			 Identifier 			 ID 
-end 			 Reserved Word 			 END 
+
+![ScannerOutput](https://user-images.githubusercontent.com/73910634/146786523-5025f40e-1d17-4d0b-a6a8-55cc9ad85b4c.PNG)
 
 Parser Output:
 ![Parse_Tree gv](https://user-images.githubusercontent.com/73910634/146785255-c2abf8c8-72b8-4762-97ee-6145ef5bc82e.png)

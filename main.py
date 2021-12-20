@@ -155,6 +155,13 @@ class Ui_MainWindow(object):
         self.Save_btn.setFont(font)
         self.Save_btn.setObjectName("Save_btn")
 
+        # Nested Comments Check box
+        self.nested_cbox = QtWidgets.QCheckBox(self.centralwidget)
+        self.nested_cbox.setText("Nested Comments")
+        self.nested_cbox.move(1340, 250)
+        self.nested_cbox.setFont(font)
+        self.nested_cbox.setChecked(True)
+
         # Line Number Label
         self.line_num_lbl = QtWidgets.QLabel(self.centralwidget)
         self.line_num_lbl.setGeometry(QtCore.QRect(30, 118, 20, 681))
@@ -200,8 +207,10 @@ class Ui_MainWindow(object):
         global Output_String
         global TokensList
         self.output_lbl.setText("")
-        TokensList = Scan(self.input_tedt.toPlainText())
+        Nested = self.nested_cbox.isChecked()
+        TokensList = Scan(self.input_tedt.toPlainText(), Nested)
         self.AdjustLineNumber()
+
         if not TokensList:
             # Message Box
             msg = QMessageBox()
@@ -230,7 +239,8 @@ class Ui_MainWindow(object):
         global Output_String
         global TokensList
         self.output_lbl.setText("")
-        TokensList = Scan(self.input_tedt.toPlainText())
+        Nested = self.nested_cbox.isChecked()
+        TokensList = Scan(self.input_tedt.toPlainText(), Nested)
         self.AdjustLineNumber()
         if not TokensList:
             # Message Box

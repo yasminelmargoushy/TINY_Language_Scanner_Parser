@@ -2,7 +2,7 @@ ReservedWords = ["if", "then", "else", "end", "repeat", "until", "read", "write"
 SpecialSymbols = ['+', '-', '*', '/', '=', '<', '>', '(', ')', ';']
 SpecialSymbolsSTR = ["PLUS", "MINUS", "TIMES", "DIVIDE", "EQUAL", "LESS_THAN", "GREATER_THAN", "LEFT_BRACKET", "RIGHT_BRACKET", "SEMI_COLON"]
 
-def Scan(InputTxt):
+def Scan(InputTxt, nested):
     InputTxt += " "
     TokenList = []
     state = "Start"
@@ -32,13 +32,20 @@ def Scan(InputTxt):
                 state = "Start"
                 Token = ""
         elif state == "Comment":
-            if x == '{':
-                OpenComments += 1
-            elif x == "}":
-                OpenComments -= 1
-                if OpenComments == 0:
+            if nested:
+                if x == '{':
+                    OpenComments += 1
+                elif x == "}":
+                    OpenComments -= 1
+                    if OpenComments == 0:
+                        state = "Start"
+                        continue
+            else:
+                if x == "}":
+                    OpenComments = 0
                     state = "Start"
                     continue
+
         elif state == ":Special Symbol":
             if x == '=':
                 Token += x

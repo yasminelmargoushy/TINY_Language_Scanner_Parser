@@ -315,12 +315,12 @@ def Draw(Nodes, Edges, Same_Rank):
     # Add Nodes
     for i in Nodes:
         if Nodes[i][2] == 'o':
-            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="oval", color="black", fontcolor="black")
+            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="oval", color="red", fontcolor="red")
         elif Nodes[i][2] == 's':
-            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="box", rank="same", color="blue", fontcolor="blue")
+            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="box", rank="same", color="black", fontcolor="black")
     # Add Edges
     for Edge in Edges:
-        Tree.edge(str(Edge[0]), str(Edge[1]), color="blue")
+        Tree.edge(str(Edge[0]), str(Edge[1]), color="black")
     # Adjust Rank
     for Same in Same_Rank:
         with Tree.subgraph() as SubTree:

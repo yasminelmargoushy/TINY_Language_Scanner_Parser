@@ -85,6 +85,7 @@ def Scan(InputTxt, nested):
 def PrintTokens(TokenList):
     StringList = ""
     ERRORflag = False
+    ReturnList = []
     for Token in TokenList:
         if Token[1] == "Number":
             StringList += f"{Token[0]} \t\t\t {Token[1]} \t\t\t\t {Token[2]} \n"

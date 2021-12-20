@@ -20,7 +20,6 @@ Initial_Text = '''{ Sample program in TINY language – computes factorial }
         write  fact   {  output  factorial of x }
      end'''
 Output_String = ""
-Output_Type = ""
 TokensList = []
 File_Path = os.getcwd()
 File_Name = "NOT_Named"
@@ -289,22 +288,20 @@ class Ui_MainWindow(object):
 
     def save_handler(self):
         global Output_String
-        global Output_Type
         global File_Path
         global File_Name
         self.AdjustLineNumber()
-        if Output_Type == "Scan":
-            file = open(f"{File_Path}//{File_Name}scan", "w")
-            file.write(Output_String)
-            file.close()
-            # Message Box
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Information)
-            msg.setText("Saved")
-            msg.setInformativeText(f"Scanned Tokens are Saved in '{File_Path}' \nIt's name is {File_Name}scan")
-            msg.setWindowTitle("Information")
-            msg.setStandardButtons(QMessageBox.Ok)
-            msg.exec_()
+        file = open(f"{File_Path}//{File_Name}scan", "w")
+        file.write(Output_String)
+        file.close()
+        # Message Box
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("Saved")
+        msg.setInformativeText(f"Scanned Tokens are Saved in '{File_Path}' \nIt's name is {File_Name}scan")
+        msg.setWindowTitle("Information")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
 
     def open_dialog_box(self):
         global File_Path

@@ -44,7 +44,7 @@ class Ui_MainWindow(object):
 
         # Input Scroll Area
         self.input = QtWidgets.QScrollArea(self.centralwidget)
-        self.input.setGeometry(QtCore.QRect(30, 100, 631, 701))
+        self.input.setGeometry(QtCore.QRect(60, 100, 601, 701))
         self.input.setWidgetResizable(True)
         self.input.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.input.setObjectName("input")
@@ -155,6 +155,18 @@ class Ui_MainWindow(object):
         self.Save_btn.setFont(font)
         self.Save_btn.setObjectName("Save_btn")
 
+        # Line Number Label
+        self.line_num_lbl = QtWidgets.QLabel(self.centralwidget)
+        self.line_num_lbl.setGeometry(QtCore.QRect(30, 118, 20, 681))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(10)
+        self.line_num_lbl.setFont(font)
+        self.line_num_lbl.setText("")
+        self.line_num_lbl.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.line_num_lbl.setObjectName("line_num_lbl")
+        self.AdjustLineNumber()
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1549, 26))
@@ -186,10 +198,10 @@ class Ui_MainWindow(object):
 
     def scan_handler(self):
         global Output_String
-        global Output_Type
         global TokensList
-        Output_Type = "Scan"
+        self.output_lbl.setText("")
         TokensList = Scan(self.input_tedt.toPlainText())
+        self.AdjustLineNumber()
         if not TokensList:
             # Message Box
             msg = QMessageBox()
@@ -216,10 +228,10 @@ class Ui_MainWindow(object):
 
     def parse_handler(self):
         global Output_String
-        global Output_Type
         global TokensList
-        Output_Type = "Scan"
+        self.output_lbl.setText("")
         TokensList = Scan(self.input_tedt.toPlainText())
+        self.AdjustLineNumber()
         if not TokensList:
             # Message Box
             msg = QMessageBox()
@@ -253,11 +265,13 @@ class Ui_MainWindow(object):
                     msg.setText("Syntax Error")
                     Info = "This TINY Code has a Syntax Error\n"
                     for Token in ParseRet[1]:
-                        Info = Info + f'LINE# {Token[2]} Syntax Error with Token "{Token[1]}"\n'
+                        Info = Info + f'LINE# {Token[2]}: {Token[3]} "{Token[1].lower()}"\n'
+
                     msg.setInformativeText(Info)
                     msg.setWindowTitle("Error")
                     msg.setStandardButtons(QMessageBox.Ok)
                     msg.exec_()
+                    Parse_OBJ.clear_tables()
                 else:
                     Draw(Parse_OBJ.nodes_table, Parse_OBJ.edges_table, Parse_OBJ.same_rank_nodes)
                     Parse_OBJ.clear_tables()
@@ -268,6 +282,7 @@ class Ui_MainWindow(object):
         global Output_Type
         global File_Path
         global File_Name
+        self.AdjustLineNumber()
         if Output_Type == "Scan":
             file = open(f"{File_Path}//{File_Name}scan", "w")
             file.write(Output_String)
@@ -296,6 +311,17 @@ class Ui_MainWindow(object):
             File_Name = Split_Path[-1]
             for i in range(len(Split_Path) - 1):
                 File_Path = File_Path + Split_Path[i] + "/"
+
+
+    def AdjustLineNumber(self):
+        string = self.input_tedt.toPlainText()
+        Lines = string.count("\n")
+        Num = ""
+        i = 1
+        while i <= Lines + 1:
+            Num = Num + str(i) + "\n"
+            i += 1
+        self.line_num_lbl.setText(Num)
 
 # MAIN:
 if __name__ == "__main__":

@@ -65,33 +65,47 @@ class Parser:
             self.error = True
             temperrortoken = []
             temperrortoken.append(self.token)
-            temperrortoken.append(self.code_list[self.tmp_index])
+            temperrortoken.append(x)
             temperrortoken.append(self.Line_list[self.tmp_index])
+            temperrortoken.append("Missing Token")
             self.errorToken.append(temperrortoken)
 
     def statement(self):
-        if self.token == 'IF':
-            t = self.if_stmt()
-            return t
-        elif self.token == 'REPEAT':
-            t = self.repeat_stmt()
-            return t
-        elif self.token == 'ID':
-            t = self.assign_stmt()
-            return t
-        elif self.token == 'READ':
-            t = self.read_stmt()
-            return t
-        elif self.token == 'WRITE':
-            t = self.write_stmt()
-            return t
-        else:
+        try:
+            if self.token == 'IF':
+                t = self.if_stmt()
+                return t
+            elif self.token == 'REPEAT':
+                t = self.repeat_stmt()
+                return t
+            elif self.token == 'ID' and (self.code_list[self.tmp_index + 1] == ":="):
+                t = self.assign_stmt()
+                return t
+            elif self.token == 'READ':
+                t = self.read_stmt()
+                return t
+            elif self.token == 'WRITE':
+                t = self.write_stmt()
+                return t
+            else:
+                self.error = True
+                temperrortoken = []
+                temperrortoken.append(self.token)
+                temperrortoken.append(self.code_list[self.tmp_index])
+                temperrortoken.append(self.Line_list[self.tmp_index])
+                temperrortoken.append("Unknown Statement")
+                self.errorToken.append(temperrortoken)
+                self.next_token()
+        except:
             self.error = True
             temperrortoken = []
             temperrortoken.append(self.token)
             temperrortoken.append(self.code_list[self.tmp_index])
             temperrortoken.append(self.Line_list[self.tmp_index])
+            temperrortoken.append("Uncomplete Statement")
             self.errorToken.append(temperrortoken)
+            self.next_token()
+
 
     def stmt_sequence(self):
         t = self.statement()
@@ -117,10 +131,10 @@ class Parser:
             self.match("RIGHT_BRACKET")
         elif self.token == "NUM":
             t = Node(
-                'CONSTANT', '(' + self.code_list[self.tmp_index] + ')', 'o')
+                'const', '(' + self.code_list[self.tmp_index] + ')', 'o')
             self.match("NUM")
         elif self.token == "ID":
-            t = Node('IDENTIFIER',
+            t = Node('id',
                      '(' + self.code_list[self.tmp_index] + ')', 'o')
             self.match("ID")
         else:
@@ -128,6 +142,7 @@ class Parser:
             temperrortoken = []
             temperrortoken.append(self.token)
             temperrortoken.append(self.code_list[self.tmp_index])
+            temperrortoken.append("Unknown Factor")
             self.errorToken.append(temperrortoken)
         return t
 
@@ -135,7 +150,7 @@ class Parser:
         t = self.factor()
         while self.token == "TIMES" or self.token == "DIVIDE":
             p = Node(
-                'OPERATOR', '(' + self.code_list[self.tmp_index] + ')', 'o')
+                'op', '(' + self.code_list[self.tmp_index] + ')', 'o')
             p.set_children(t)
             t = p
             self.mulop()
@@ -146,7 +161,7 @@ class Parser:
         t = self.term()
         while self.token == "PLUS" or self.token == "MINUS":
             p = Node(
-                'OPERATOR', '(' + self.code_list[self.tmp_index] + ')', 'o')
+                'op', '(' + self.code_list[self.tmp_index] + ')', 'o')
             p.set_children(t)
             t = p
             self.addop()
@@ -157,7 +172,7 @@ class Parser:
         t = self.simple_exp()
         if self.token == "LESS_THAN" or self.token == "EQUAL" or self.token == "GREATER_THAN":
             p = Node(
-                'OPERATOR', '(' + self.code_list[self.tmp_index] + ')', 'o')
+                'op', '(' + self.code_list[self.tmp_index] + ')', 'o')
             p.set_children(t)
             t = p
             self.comparison_op()
@@ -165,7 +180,7 @@ class Parser:
         return t
 
     def if_stmt(self):
-        t = Node("IF", '', 's')
+        t = Node("if", '', 's')
         if self.token == "IF":
             self.match("IF")
             t.set_children(self.exp())
@@ -198,7 +213,7 @@ class Parser:
             self.match("DIVIDE")
 
     def repeat_stmt(self):
-        t = Node('REPEAT', '', 's')
+        t = Node('repeat', '', 's')
         if self.token == "REPEAT":
             self.match("REPEAT")
             t.set_children(self.stmt_sequence())
@@ -207,20 +222,20 @@ class Parser:
         return t
 
     def assign_stmt(self):
-        t = Node('ASSIGN', '(' + self.code_list[self.tmp_index] + ')', 's')
+        t = Node('assign', '(' + self.code_list[self.tmp_index] + ')', 's')
         self.match("ID")
         self.match("ASSIGN")
         t.set_children(self.exp())
         return t
 
     def read_stmt(self):
-        t = Node('READ', '(' + self.code_list[self.tmp_index+1] + ')', 's')
+        t = Node('read', '(' + self.code_list[self.tmp_index+1] + ')', 's')
         self.match('READ')
         self.match('ID')
         return t
 
     def write_stmt(self):
-        t = Node('WRITE', '', 's')
+        t = Node('write', '', 's')
         self.match('WRITE')
         t.set_children(self.exp())
         return t
@@ -294,18 +309,18 @@ class Parser:
 
 
 def Draw(Nodes, Edges, Same_Rank):
-    Tree = graphviz.Graph('Parse_Tree', comment='The Parse Tree', format="png")
+    Tree = graphviz.Graph('Parse_Tree', comment='The Parse Tree', format="png", )
     Tree.attr(rankdir="TB")
 
     # Add Nodes
     for i in Nodes:
         if Nodes[i][2] == 'o':
-            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="oval")
+            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="oval", color="black", fontcolor="black")
         elif Nodes[i][2] == 's':
-            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="box", rank="same")
+            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="box", rank="same", color="blue", fontcolor="blue")
     # Add Edges
     for Edge in Edges:
-        Tree.edge(str(Edge[0]), str(Edge[1]))
+        Tree.edge(str(Edge[0]), str(Edge[1]), color="blue")
     # Adjust Rank
     for Same in Same_Rank:
         with Tree.subgraph() as SubTree:

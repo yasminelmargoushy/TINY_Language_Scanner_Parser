@@ -1,3 +1,4 @@
+import graphviz
 class Node:
     def __init__(self, t, c, s):
         self.token_value = t
@@ -290,3 +291,26 @@ class Parser:
     def clear_tables(self):
         self.nodes_table.clear()
         self.edges_table.clear()
+
+
+def Draw(Nodes, Edges, Same_Rank):
+    Tree = graphviz.Graph('Parse_Tree', comment='The Parse Tree', format="png")
+    Tree.attr(rankdir="TB")
+
+    # Add Nodes
+    for i in Nodes:
+        if Nodes[i][2] == 'o':
+            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="oval")
+        elif Nodes[i][2] == 's':
+            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="box", rank="same")
+    # Add Edges
+    for Edge in Edges:
+        Tree.edge(str(Edge[0]), str(Edge[1]))
+    # Adjust Rank
+    for Same in Same_Rank:
+        with Tree.subgraph() as SubTree:
+            SubTree.attr(rank='same')
+            for n in Same:
+                SubTree.node(str(n))
+    print(Tree.source)
+    Tree.render(directory='Parse_Tree', view=True)

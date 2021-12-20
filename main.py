@@ -6,11 +6,10 @@ from PyQt5.QtWidgets import QMessageBox
 
 # IMPORTS FUNCTIONS FROM FILES:
 from Scanner import Scan, PrintTokens
-from Parser import Parser
-#Draw
+from Parser import Parser, Draw
 
 # GLOBAL VARIABLES:
-Initial_Text = '''{ Sample program in TINY language – computes factorial}
+Initial_Text = '''{ Sample program in TINY language – computes factorial }
      read x;   {input an integer }
      if  0 < x   then     {  don’t compute if x <= 0 }
         fact  := 1;
@@ -64,7 +63,7 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.input_tedt.setFont(font)
         self.input_tedt.setText("")
-        self.input_tedt.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.input_tedt.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignTop)
         self.input_tedt.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.input_tedt.setObjectName("input_tedt")
         self.verticalLayout.addWidget(self.input_tedt)
@@ -260,12 +259,7 @@ class Ui_MainWindow(object):
                     msg.setStandardButtons(QMessageBox.Ok)
                     msg.exec_()
                 else:
-                    nodes_list = Parse_OBJ.nodes_table
-                    edges_list = Parse_OBJ.edges_table
-                    # Add Nodes to Graph
-
-                    # Add Edges to Graph
-
+                    Draw(Parse_OBJ.nodes_table, Parse_OBJ.edges_table, Parse_OBJ.same_rank_nodes)
                     Parse_OBJ.clear_tables()
 
 
@@ -302,7 +296,6 @@ class Ui_MainWindow(object):
             File_Name = Split_Path[-1]
             for i in range(len(Split_Path) - 1):
                 File_Path = File_Path + Split_Path[i] + "/"
-
 
 # MAIN:
 if __name__ == "__main__":

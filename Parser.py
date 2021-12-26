@@ -315,7 +315,7 @@ def Draw(Nodes, Edges, Same_Rank):
     # Add Nodes
     for i in Nodes:
         if Nodes[i][2] == 'o':
-            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="oval", color="red", fontcolor="red")
+            Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="oval", color="black", fontcolor="black")
         elif Nodes[i][2] == 's':
             Tree.node(str(i), f"{Nodes[i][0]}\n{Nodes[i][1]}", shape="box", rank="same", color="black", fontcolor="black")
     # Add Edges
@@ -327,5 +327,4 @@ def Draw(Nodes, Edges, Same_Rank):
             SubTree.attr(rank='same')
             for n in Same:
                 SubTree.node(str(n))
-    print(Tree.source)
     Tree.render(directory='Parse_Tree', view=True)

@@ -1,8 +1,7 @@
 # IMPORT PYQT5 CLASSES:
 import os
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 # IMPORTS FUNCTIONS FROM FILES:
 from Scanner import Scan, PrintTokens
@@ -94,6 +93,7 @@ class Ui_MainWindow(object):
         self.output_lbl.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.output_lbl.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.output_lbl.setObjectName("output_lbl")
+        self.output_lbl.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse)
         self.verticalLayout_2.addWidget(self.output_lbl)
         self.output.setWidget(self.scrollAreaWidgetContents_2)
 

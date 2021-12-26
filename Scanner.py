@@ -1,6 +1,6 @@
 ReservedWords = ["if", "then", "else", "end", "repeat", "until", "read", "write"]
 SpecialSymbols = ['+', '-', '*', '/', '=', '<', '>', '(', ')', ';']
-SpecialSymbolsSTR = ["PLUS", "MINUS", "TIMES", "DIVIDE", "EQUAL", "LESS_THAN", "GREATER_THAN", "LEFT_BRACKET", "RIGHT_BRACKET", "SEMI_COLON"]
+SpecialSymbolsSTR = ["PLUS", "MINUS", "MULT", "DIV", "EQUAL", "LESSTHAN", "GREATERTHAN", "OPENBRACKET", "CLOSEDBRACKET", "SEMICOLON"]
 
 def Scan(InputTxt, nested):
     InputTxt += " "
@@ -19,7 +19,7 @@ def Scan(InputTxt, nested):
                 if Token in ReservedWords:
                     TempList = [Token, "Reserved Word", Token.upper(), LineNumber]
                 else:
-                    TempList = [Token, state, "ID", LineNumber]
+                    TempList = [Token, state, "IDENTIFIER", LineNumber]
                 TokenList.append(TempList)
                 state = "Start"
                 Token = ""
@@ -27,7 +27,7 @@ def Scan(InputTxt, nested):
             if (x.isnumeric()) or (x == '.'):
                 Token += x
             else:
-                TempList = [Token, state, "NUM", LineNumber]
+                TempList = [Token, state, "NUMBER", LineNumber]
                 TokenList.append(TempList)
                 state = "Start"
                 Token = ""
@@ -87,12 +87,10 @@ def PrintTokens(TokenList):
     ERRORflag = False
     ReturnList = []
     for Token in TokenList:
-        if Token[1] == "Number":
-            StringList += f"{Token[0]} \t\t\t {Token[1]} \t\t\t\t {Token[2]} \n"
-        elif Token[1] == "Unexpected Symbol":
-            StringList += f"{Token[0]} \t\t\t {Token[1]} \t\t {Token[2]} \n"
+        if Token[1] == "Unexpected Symbol":
+            StringList += f"{Token[0]},{Token[2]} \t\t\t ERROR: UNEXPECTED SYMBOL\n"
             ERRORflag = True
         else:
-            StringList += f"{Token[0]} \t\t\t {Token[1]} \t\t\t {Token[2]} \n"
+            StringList += f"{Token[0]},{Token[2]} \n"
         ReturnList = [ERRORflag, StringList]
     return ReturnList

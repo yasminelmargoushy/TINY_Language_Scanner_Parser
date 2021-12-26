@@ -78,7 +78,7 @@ class Parser:
             elif self.token == 'REPEAT':
                 t = self.repeat_stmt()
                 return t
-            elif self.token == 'IDENTIFIER' and (self.code_list[self.tmp_index + 1] == ":="):
+            elif self.token == 'IDENTIFIER':
                 t = self.assign_stmt()
                 return t
             elif self.token == 'READ':
@@ -125,6 +125,7 @@ class Parser:
         return t
 
     def factor(self):
+        t = None
         if self.token == "OPENBRACKET":
             self.match("OPENBRACKET")
             t = self.exp()
@@ -142,6 +143,7 @@ class Parser:
             temperrortoken = []
             temperrortoken.append(self.token)
             temperrortoken.append(self.code_list[self.tmp_index])
+            temperrortoken.append(self.Line_list[self.tmp_index])
             temperrortoken.append("Unknown Factor")
             self.errorToken.append(temperrortoken)
         return t
@@ -288,10 +290,11 @@ class Parser:
 
     def run(self):
         self.parse_tree = self.stmt_sequence()  # create parse tree
-        self.create_nodes_table()  # create nodes_table
-        self.create_edges_table()  # create edges_table
-        self.edges_table = Parser.edges_table  # save edges_table
-        self.nodes_table = Parser.nodes_table  # save nodes_table
+        if self.error == False:
+            self.create_nodes_table()  # create nodes_table
+            self.create_edges_table()  # create edges_table
+            self.edges_table = Parser.edges_table  # save edges_table
+            self.nodes_table = Parser.nodes_table  # save nodes_table
         Return = []
         if (self.tmp_index < len(self.tokens_list) - 1) or self.error:
             Return.append(True)

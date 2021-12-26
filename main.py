@@ -280,7 +280,6 @@ class Ui_MainWindow(object):
                     msg.setWindowTitle("Error")
                     msg.setStandardButtons(QMessageBox.Ok)
                     msg.exec_()
-                    Parse_OBJ.clear_tables()
                 else:
                     Draw(Parse_OBJ.nodes_table, Parse_OBJ.edges_table, Parse_OBJ.same_rank_nodes)
                     Parse_OBJ.clear_tables()

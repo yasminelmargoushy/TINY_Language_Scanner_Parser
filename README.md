@@ -74,8 +74,11 @@ Input:
 Output:
 
 Scanner Output:
+
 ![image](https://user-images.githubusercontent.com/73910634/147478288-429d0271-ce2e-4dc6-9c86-8d502e466220.png)
+
 Parser Output:
+
 ![Parse_Tree gv](https://user-images.githubusercontent.com/73910634/147478313-ecfa707c-2435-441c-a04b-f664f79e84de.png)
 
 
